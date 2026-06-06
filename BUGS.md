@@ -5,6 +5,7 @@
 - `application.properties` previously referenced a missing class (`SnakeCaseWithPluralizedTablePhysicalNamingStrategy`). **FIXED** — class copied into repo.
 - `spring.application.name` was `equipment-service`. **FIXED** — now `notification-service`.
 - Spring Boot parent POM was `4.0.6` (non-existent version). **FIXED** — downgraded to `3.4.3`.
+- Tests required a running database. **FIXED** — `application-test.properties` with H2 in-memory database added.
 
 ## Copy-Paste Template Artifacts
 
@@ -21,20 +22,18 @@
 
 ## Remaining Functional Issues
 
-1. **Tests fail without a running database** — H2 is on the test classpath but there is no `application-test.properties` or datasource override, so `@SpringBootTest` fails without Postgres.
+1. **`DeviceTokenEntity` lacks a unique constraint on `(userId, fcmToken)`** — concurrent registration requests can create duplicate rows.
 
-2. **`DeviceTokenEntity` lacks a unique constraint on `(userId, fcmToken)`** — concurrent registration requests can create duplicate rows.
+2. **No `@Transactional` on application services** — `SendNotificationCommandService`, `RegisterDeviceTokenCommandService`, and repository adapters are not transactional.
 
-3. **No `@Transactional` on application services** — `SendNotificationCommandService`, `RegisterDeviceTokenCommandService`, and repository adapters are not transactional.
+3. **`NotificationsController` directly injects `NotificationJpaRepository`** — the `PATCH /read` endpoint bypasses the application layer.
 
-4. **`NotificationsController` directly injects `NotificationJpaRepository`** — the `PATCH /read` endpoint bypasses the application layer.
+4. **`NotificationResponseResource` is missing `isRead` and `recipientRole`** — these fields exist in the entity but are not exposed in the REST response.
 
-5. **`NotificationResponseResource` is missing `isRead` and `recipientRole`** — these fields exist in the entity but are not exposed in the REST response.
+5. **Request records lack validation** — `SendNotificationRequestResource` and `RegisterDeviceTokenRequestResource` have no Bean Validation constraints; controllers don't use `@Valid`.
 
-6. **Request records lack validation** — `SendNotificationRequestResource` and `RegisterDeviceTokenRequestResource` have no Bean Validation constraints; controllers don't use `@Valid`.
+6. **`GlobalExceptionHandler` only catches `IllegalArgumentException` and `IllegalStateException`** — all other exceptions fall through to Spring's default HTML error page.
 
-7. **`GlobalExceptionHandler` only catches `IllegalArgumentException` and `IllegalStateException`** — all other exceptions fall through to Spring's default HTML error page.
+7. **`AuditableAbstractAggregateRoot` and `AuditableModel` are unused** — entities don't extend them despite `@EnableJpaAuditing` being present.
 
-8. **`AuditableAbstractAggregateRoot` and `AuditableModel` are unused** — entities don't extend them despite `@EnableJpaAuditing` being present.
-
-9. **`io.github.encryptorcode:pluralize` dependency is dead weight** — only used by the naming strategy class.
+8. **`io.github.encryptorcode:pluralize` dependency is dead weight** — only used by the naming strategy class.
