@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import notification_service.notification.application.internal.commandservices.RegisterDeviceTokenCommandService;
 import notification_service.notification.domain.models.commands.RegisterDeviceTokenCommand;
 import notification_service.notification.interfaces.rest.resources.RegisterDeviceTokenRequestResource;
+import notification_service.shared.infrastructure.security.UserContext;
 
 
 @RestController
@@ -20,6 +21,10 @@ public class DeviceTokensController {
 
     @PostMapping
     public ResponseEntity<Void> registerToken(@PathVariable Long userId, @RequestBody RegisterDeviceTokenRequestResource resource) {
+        Long authenticatedUserId = UserContext.getUserId();
+        if (authenticatedUserId == null || !authenticatedUserId.equals(userId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         var command = new RegisterDeviceTokenCommand(userId, resource.fcmToken());
         commandHandler.handle(command);
         return new ResponseEntity<>(HttpStatus.CREATED);

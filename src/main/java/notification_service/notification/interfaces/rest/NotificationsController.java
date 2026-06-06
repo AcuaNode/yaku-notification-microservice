@@ -1,5 +1,6 @@
 package notification_service.notification.interfaces.rest;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,6 +9,7 @@ import notification_service.notification.domain.models.queries.ListNotifications
 import notification_service.notification.infrastructure.persistance.jpa.NotificationJpaRepository;
 import notification_service.notification.interfaces.rest.resources.NotificationResponseResource;
 import notification_service.notification.interfaces.rest.transform.NotificationResourceMapper;
+import notification_service.shared.infrastructure.security.UserContext;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +29,9 @@ public class NotificationsController {
 
     @GetMapping
     public ResponseEntity<List<NotificationResponseResource>> getNotificationsByUserId(@PathVariable Long userId) {
+        if (!isAuthorized(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         var query = new ListNotificationsQuery(userId);
         var notifications = listNotificationsQueryHandler.handle(query);
 
@@ -39,7 +44,15 @@ public class NotificationsController {
 
     @PatchMapping("/read")
     public ResponseEntity<Void> markAllAsRead(@PathVariable Long userId) {
+        if (!isAuthorized(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         notificationJpaRepository.markAllAsReadByUserId(userId);
         return ResponseEntity.ok().build();
+    }
+
+    private boolean isAuthorized(Long userId) {
+        Long authenticatedUserId = UserContext.getUserId();
+        return authenticatedUserId != null && authenticatedUserId.equals(userId);
     }
 }
