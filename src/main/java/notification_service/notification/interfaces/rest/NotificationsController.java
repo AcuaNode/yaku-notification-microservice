@@ -9,7 +9,6 @@ import notification_service.notification.domain.models.queries.ListNotifications
 import notification_service.notification.infrastructure.persistance.jpa.NotificationJpaRepository;
 import notification_service.notification.interfaces.rest.resources.NotificationResponseResource;
 import notification_service.notification.interfaces.rest.transform.NotificationResourceMapper;
-import notification_service.shared.infrastructure.security.UserContext;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,8 +27,10 @@ public class NotificationsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<NotificationResponseResource>> getNotificationsByUserId(@PathVariable Long userId) {
-        if (!isAuthorized(userId)) {
+    public ResponseEntity<List<NotificationResponseResource>> getNotificationsByUserId(
+            @PathVariable Long userId,
+            @RequestHeader("X-User-Id") Long headerUserId) {
+        if (!isAuthorized(userId, headerUserId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         var query = new ListNotificationsQuery(userId);
@@ -43,16 +44,17 @@ public class NotificationsController {
     }
 
     @PatchMapping("/read")
-    public ResponseEntity<Void> markAllAsRead(@PathVariable Long userId) {
-        if (!isAuthorized(userId)) {
+    public ResponseEntity<Void> markAllAsRead(
+            @PathVariable Long userId,
+            @RequestHeader("X-User-Id") Long headerUserId) {
+        if (!isAuthorized(userId, headerUserId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         notificationJpaRepository.markAllAsReadByUserId(userId);
         return ResponseEntity.ok().build();
     }
 
-    private boolean isAuthorized(Long userId) {
-        Long authenticatedUserId = UserContext.getUserId();
-        return authenticatedUserId != null && authenticatedUserId.equals(userId);
+    private boolean isAuthorized(Long pathUserId, Long headerUserId) {
+        return headerUserId != null && headerUserId.equals(pathUserId);
     }
 }

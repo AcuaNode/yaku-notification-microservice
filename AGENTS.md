@@ -28,7 +28,7 @@ Use the Maven wrapper (Maven 3.9.16):
 - FCM push notifications are mocked: `FcmClient` implements `PushNotificationService` and only prints to stdout.
 - Kafka event publishing: `KafkaDomainEventPublisher` publishes events to Kafka topics using `KafkaTemplate`.
 - OpenAPI/Swagger is auto-configured via `springdoc-openapi-starter-webmvc-ui` 2.8.8; config bean reads from `documentation.application.*` properties populated by Maven resource filtering.
-- Gateway auth: `UserContextFilter` reads `X-User-Id` / `X-User-Role` headers from the API gateway and stores them in a thread-local `UserContext`. Controllers validate that `@PathVariable Long userId` matches the authenticated user; mismatches return 403.
+- Gateway auth: Gateway-facing controllers read `X-User-Id` via `@RequestHeader` and validate it against the `@PathVariable Long userId`; mismatches return 403. The webhook endpoint (`/api/v1/webhooks/notifications`) is service-to-service and does not use gateway headers.
 
 ## Repo-specific conventions
 - Lombok is used (`@Getter`, `@Setter`) and must be registered as an annotation processor (already configured in `pom.xml`).
