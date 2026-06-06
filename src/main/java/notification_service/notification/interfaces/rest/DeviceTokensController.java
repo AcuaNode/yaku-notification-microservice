@@ -21,7 +21,7 @@ public class DeviceTokensController {
     @PostMapping
     public ResponseEntity<Void> registerToken(
             @PathVariable Long userId,
-            @RequestHeader("X-User-Id") Long headerUserId,
+            @RequestHeader(value = "X-User-Id", required = false) Long headerUserId,
             @RequestBody RegisterDeviceTokenRequestResource resource) {
         if (!isAuthorized(userId, headerUserId)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);

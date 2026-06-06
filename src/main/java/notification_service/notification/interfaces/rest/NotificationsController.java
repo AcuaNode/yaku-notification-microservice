@@ -29,7 +29,7 @@ public class NotificationsController {
     @GetMapping
     public ResponseEntity<List<NotificationResponseResource>> getNotificationsByUserId(
             @PathVariable Long userId,
-            @RequestHeader("X-User-Id") Long headerUserId) {
+            @RequestHeader(value = "X-User-Id", required = false) Long headerUserId) {
         if (!isAuthorized(userId, headerUserId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -46,7 +46,7 @@ public class NotificationsController {
     @PatchMapping("/read")
     public ResponseEntity<Void> markAllAsRead(
             @PathVariable Long userId,
-            @RequestHeader("X-User-Id") Long headerUserId) {
+            @RequestHeader(value = "X-User-Id", required = false) Long headerUserId) {
         if (!isAuthorized(userId, headerUserId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
