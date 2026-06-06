@@ -22,13 +22,22 @@ Use the Maven wrapper (Maven 3.9.16):
 - App runs on port **8083** (`server.port=8083`).
 - `spring-boot-docker-compose` dependency is commented out in `pom.xml`; run `docker compose up -d` manually for local infra.
 
+## Testing
+- Test profile `test` uses H2 in-memory database (`application-test.properties`).
+- `NotificationServiceApplicationTests` has 10 MockMvc tests covering:
+  - Context load smoke test
+  - Gateway auth: 403 when `X-User-Id` header is missing
+  - Gateway auth: 403 when `X-User-Id` header mismatches path variable
+  - Gateway auth: 200/201 when header matches path variable
+- Kafka auto-configuration is disabled in test profile to avoid broker connection.
+
 ## Architecture notes
 - DDD-lite folder structure: `domain` / `application/internal` / `infrastructure` / `interfaces/rest`.
 - `Notification` and `DeviceToken` are domain aggregates (plain Java objects). JPA entities are `NotificationEntity` and `DeviceTokenEntity` in `infrastructure/persistance/jpa`.
 - FCM push notifications are mocked: `FcmClient` implements `PushNotificationService` and only prints to stdout.
 - Kafka event publishing: `KafkaDomainEventPublisher` publishes events to Kafka topics using `KafkaTemplate`.
 - OpenAPI/Swagger is auto-configured via `springdoc-openapi-starter-webmvc-ui` 2.8.8; config bean reads from `documentation.application.*` properties populated by Maven resource filtering.
-- Gateway auth: Gateway-facing controllers read `X-User-Id` via `@RequestHeader` and validate it against the `@PathVariable Long userId`; mismatches return 403. The webhook endpoint (`/api/v1/webhooks/notifications`) is service-to-service and does not use gateway headers.
+- Gateway auth: Gateway-facing controllers read `X-User-Id` via `@RequestHeader(value = "X-User-Id", required = false)` and validate it against the `@PathVariable Long userId`; mismatches (or missing headers) return 403. The `required = false` is intentional — it lets the controller return 403 instead of Spring throwing a 400 for missing headers. The webhook endpoint (`/api/v1/webhooks/notifications`) is service-to-service and does not use gateway headers.
 
 ## Repo-specific conventions
 - Lombok is used (`@Getter`, `@Setter`) and must be registered as an annotation processor (already configured in `pom.xml`).
