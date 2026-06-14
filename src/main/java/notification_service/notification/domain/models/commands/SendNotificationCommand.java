@@ -1,15 +1,13 @@
 package notification_service.notification.domain.models.commands;
 
 import java.math.BigDecimal;
-import notification_service.notification.domain.models.valueobjects.NotificationType;
-
+import io.github.rafaviv.yakubackend.notification.domain.models.valueobjects.NotificationType;
 
 public record SendNotificationCommand(
     NotificationType type,
     String message,
     Long userId,
-    String role,
-    BigDecimal temperature,
-    BigDecimal ph,
+    BigDecimal value,
+    String sensorType,
     String hardwareStatus
 ) {}

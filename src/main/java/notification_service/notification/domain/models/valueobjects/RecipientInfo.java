@@ -1,8 +1,7 @@
 package notification_service.notification.domain.models.valueobjects;
 
 public record RecipientInfo(
-    Long userId,
-    String role
+    Long userId
 ) {
     public RecipientInfo {
         if (userId == null || userId <= 0) {

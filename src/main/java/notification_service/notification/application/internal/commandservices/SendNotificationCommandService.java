@@ -29,8 +29,8 @@ public class SendNotificationCommandService {
     }
 
     public void handle(SendNotificationCommand command) {
-        RecipientInfo recipient = new RecipientInfo(command.userId(), command.role());
-        TriggerSnapshot triggerData = new TriggerSnapshot(command.temperature(), command.ph(), command.hardwareStatus());
+        RecipientInfo recipient = new RecipientInfo(command.userId());
+        TriggerSnapshot triggerData = new TriggerSnapshot(command.value(), command.sensorType() != null ? SensorType.valueOf(command.sensorType()) : null, command.hardwareStatus());
         
         Notification notification = new Notification(command.type(), command.message(), recipient, triggerData);
         

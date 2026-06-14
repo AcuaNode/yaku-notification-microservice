@@ -27,10 +27,11 @@ public class NotificationEntity {
     @Column(nullable = false)
     private Long recipientUserId;
 
-    private String recipientRole;
+    private BigDecimal triggerValue;
 
-    private BigDecimal triggerTemperature;
-    private BigDecimal triggerPh;
+    @Enumerated(EnumType.STRING)
+    private SensorType triggerSensorType;
+
     private String triggerHardwareStatus;
 
     @Column(nullable = false)

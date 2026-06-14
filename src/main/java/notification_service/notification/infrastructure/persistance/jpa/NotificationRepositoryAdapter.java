@@ -29,9 +29,8 @@ public class NotificationRepositoryAdapter implements NotificationRepository {
         entity.setType(notification.getType());
         entity.setMessage(notification.getMessage());
         entity.setRecipientUserId(notification.getRecipient().userId());
-        entity.setRecipientRole(notification.getRecipient().role());
-        entity.setTriggerTemperature(notification.getTriggerData().temperature());
-        entity.setTriggerPh(notification.getTriggerData().ph());
+        entity.setTriggerValue(notification.getTriggerData().value());
+        entity.setTriggerSensorType(notification.getTriggerData().sensorType());
         entity.setTriggerHardwareStatus(notification.getTriggerData().hardwareStatus());
         entity.setCreatedAt(notification.getCreatedAt());
 
@@ -53,8 +52,8 @@ public class NotificationRepositoryAdapter implements NotificationRepository {
     }
 
     private Notification toDomainModel(NotificationEntity entity) {
-        RecipientInfo recipient = new RecipientInfo(entity.getRecipientUserId(), entity.getRecipientRole());
-        TriggerSnapshot trigger = new TriggerSnapshot(entity.getTriggerTemperature(), entity.getTriggerPh(), entity.getTriggerHardwareStatus());
+        RecipientInfo recipient = new RecipientInfo(entity.getRecipientUserId());
+        TriggerSnapshot trigger = new TriggerSnapshot(entity.getTriggerValue(), entity.getTriggerSensorType(), entity.getTriggerHardwareStatus());
         Notification notification = new Notification(entity.getType(), entity.getMessage(), recipient, trigger);
         notification.setId(entity.getId());
         return notification;
