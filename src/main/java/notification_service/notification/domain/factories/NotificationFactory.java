@@ -1,13 +1,13 @@
 package notification_service.notification.domain.factories;
 
-
-
 import java.math.BigDecimal;
 
 import notification_service.notification.domain.models.aggregates.Notification;
 import notification_service.notification.domain.models.valueobjects.NotificationType;
 import notification_service.notification.domain.models.valueobjects.RecipientInfo;
 import notification_service.notification.domain.models.valueobjects.TriggerSnapshot;
+
+import java.math.BigDecimal;
 
 /**
  * Pattern: Factory (Creational)
@@ -17,12 +17,12 @@ import notification_service.notification.domain.models.valueobjects.TriggerSnaps
 public class NotificationFactory {
 
     public static Notification createCriticalTelemetryAlert(
-            Long userId, String message, Double currentPh, Double currentTemp) {
+            Long userId, String message, Double currentValue, SensorType sensorType) {
 
-        RecipientInfo recipient = new RecipientInfo(userId, "OWNER");
+        RecipientInfo recipient = new RecipientInfo(userId);
         TriggerSnapshot snapshot = new TriggerSnapshot(
-                BigDecimal.valueOf(currentTemp),
-                BigDecimal.valueOf(currentPh),
+                BigDecimal.valueOf(currentValue),
+                sensorType,
                 "CRITICAL_STATE"
         );
 
