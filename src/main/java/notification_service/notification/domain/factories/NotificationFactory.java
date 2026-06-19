@@ -8,8 +8,6 @@ import notification_service.notification.domain.models.valueobjects.RecipientInf
 import notification_service.notification.domain.models.valueobjects.SensorType;
 import notification_service.notification.domain.models.valueobjects.TriggerSnapshot;
 
-import java.math.BigDecimal;
-
 /**
  * Pattern: Factory (Creational)
  * Centraliza la lógica de creación de notificaciones para evitar que la capa

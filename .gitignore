@@ -31,3 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
+
+src/main/resources/yakucontrol-firebase-adminsdk-fbsvc-a5e41cfd3f.json

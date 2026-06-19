@@ -6,9 +6,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import notification_service.notification.application.internal.commandservices.SendNotificationCommandService;
-import notification_service.notification.domain.models.commands.SendNotificationCommand;
-import notification_service.notification.domain.models.valueobjects.NotificationType;
-
 @Component
 public class ThresholdBreachedEventHandler {
 
