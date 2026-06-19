@@ -1,4 +1,4 @@
-package main.java.notification_service.notification.infrastructure.connector;
+package notification_service.notification.infrastructure.connector;
 
 public class FirebaseCloudConnector {
     

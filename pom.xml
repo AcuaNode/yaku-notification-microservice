@@ -51,6 +51,15 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-admin</artifactId>
+            <version>9.2.0</version> </dependency>
+        <dependency>
+            <groupId>com.google.auth</groupId>
+            <artifactId>google-auth-library-oauth2-http</artifactId>
+            <version>1.23.0</version>
+        </dependency>
         <!-- Disabled: devs run `docker compose up -d` manually when needed -->
         <!--
         <dependency>

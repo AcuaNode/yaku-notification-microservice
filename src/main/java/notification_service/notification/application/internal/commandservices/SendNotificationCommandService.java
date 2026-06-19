@@ -6,6 +6,7 @@ import notification_service.notification.domain.models.aggregates.DeviceToken;
 import notification_service.notification.domain.models.aggregates.Notification;
 import notification_service.notification.domain.models.commands.SendNotificationCommand;
 import notification_service.notification.domain.models.valueobjects.RecipientInfo;
+import notification_service.notification.domain.models.valueobjects.SensorType;
 import notification_service.notification.domain.models.valueobjects.TriggerSnapshot;
 import notification_service.notification.domain.services.DeviceTokenRepository;
 import notification_service.notification.domain.services.NotificationRepository;

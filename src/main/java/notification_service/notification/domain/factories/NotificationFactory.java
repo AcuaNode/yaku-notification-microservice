@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import notification_service.notification.domain.models.aggregates.Notification;
 import notification_service.notification.domain.models.valueobjects.NotificationType;
 import notification_service.notification.domain.models.valueobjects.RecipientInfo;
+import notification_service.notification.domain.models.valueobjects.SensorType;
 import notification_service.notification.domain.models.valueobjects.TriggerSnapshot;
 
 import java.math.BigDecimal;

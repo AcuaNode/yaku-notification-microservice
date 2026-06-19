@@ -1,7 +1,7 @@
 package notification_service.notification.domain.models.commands;
 
 import java.math.BigDecimal;
-import io.github.rafaviv.yakubackend.notification.domain.models.valueobjects.NotificationType;
+import notification_service.notification.domain.models.valueobjects.NotificationType;
 
 public record SendNotificationCommand(
     NotificationType type,
